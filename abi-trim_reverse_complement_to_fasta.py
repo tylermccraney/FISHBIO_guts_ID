@@ -6,19 +6,19 @@ import glob
 import re
 import os
 
-# make directory to send quality-trimmed fasta files
-os.system("mkdir quality-trimmed")
+# make directory to send quality-trimmed, reverse complement fasta files
+os.system("mkdir quality-trimmed-reverse-complement")
 
-def abi_trim_to_fasta(): # function to process multiple sequences
+def abi_trim_reverse_complement_to_fasta(): # function to process multiple sequences
     abi_files = glob.glob("*.ab1") # Create list of .ab1 files
     for abi_file in abi_files:
         sample_name = abi_file.replace(".ab1", "")
         trimmed = SeqIO.read(abi_file, "abi-trim")
-        trimmed.id = trimmed.name
-        outfile = SeqIO.write(trimmed, "quality-trimmed/" + sample_name + ".fasta", "fasta-2line")
-    print(str(len(abi_files)) + " DNA sequences quality-trimmed with Mott's algorithm")
+        rev_complement = trimmed.reverse_complement(id = trimmed.name + "_rc", description = True)
+        outfile = SeqIO.write(rev_complement, "quality-trimmed-reverse-complement/" + sample_name + "_rc.fasta", "fasta-2line")
+    print(str(len(abi_files)) + " reverse complement DNA sequences quality-trimmed with Mott's algorithm")
 
-abi_trim_to_fasta() # Call function
+abi_trim_reverse_complement_to_fasta() # Call function
 
 # Description of Mott's algorithm for leading/trailing sequence trimming
 # (from the phred user manual... the arguments below are meaningless)
@@ -35,4 +35,4 @@ abi_trim_to_fasta() # Call function
 
 # Tyler McCraney
 # Humboldt State University
-# August 24, 2021
+# October 15, 2021
