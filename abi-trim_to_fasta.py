@@ -9,14 +9,14 @@ import os
 # make directory to send quality-trimmed fasta files
 os.system("mkdir quality-trimmed")
 
-def abi_trim_to_fasta(): # function to process multiple sequences
+def abi_trim_to_fasta( slice = 625 ): # function to process multiple sequences
     abi_files = glob.glob("*.ab1") # Create list of .ab1 files
     for abi_file in abi_files:
         sample_name = abi_file.replace(".ab1", "")
         trimmed = SeqIO.read(abi_file, "abi-trim")
         trimmed.id = trimmed.name
-        outfile = SeqIO.write(trimmed, "quality-trimmed/" + sample_name + ".fasta", "fasta-2line")
-    print(str(len(abi_files)) + " DNA sequences quality-trimmed with Mott's algorithm")
+        outfile = SeqIO.write(trimmed[0:slice], "quality-trimmed/" + sample_name + ".fasta", "fasta-2line")
+    print(str(len(abi_files)) + " DNA sequences quality-trimmed with Mott's algorithm and sliced at " + str(slice) + " bp")
 
 abi_trim_to_fasta() # Call function
 
