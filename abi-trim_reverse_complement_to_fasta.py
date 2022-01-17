@@ -14,8 +14,9 @@ def abi_trim_reverse_complement_to_fasta( slice = 625 ): # function to process m
     for abi_file in abi_files:
         sample_name = abi_file.replace(".ab1", "")
         trimmed = SeqIO.read(abi_file, "abi-trim")
-        rev_complement = trimmed.reverse_complement(id = trimmed.name + "_rc", description = True)
-        outfile = SeqIO.write(rev_complement[0:slice], "quality-trimmed-reverse-complement/" + sample_name + "_rc.fasta", "fasta-2line")
+        sliced = trimmed[0:slice]
+        rev_complement = sliced.reverse_complement(id = sliced.name + "_rc", description = True)
+        outfile = SeqIO.write(rev_complement, "quality-trimmed-reverse-complement/" + sample_name + "_rc.fasta", "fasta-2line")
     print(str(len(abi_files)) + " reverse complement DNA sequences quality-trimmed with Mott's algorithm and sliced at " + str(slice) + " bp")
 
 abi_trim_reverse_complement_to_fasta() # Call function
